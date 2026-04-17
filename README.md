@@ -1,2 +1,2 @@
 # Solar-System
-live wall paper created by @akshatchaurasia
+solar-system live wall paper created by @akshatchaurasia
