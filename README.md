@@ -9,3 +9,4 @@ Open Lively Wallpaper
 Drag and drop the ZIP file into the app
 
 That’s it — enjoy your new wallpaper ✨
+you can click on planets and sun to explore them
