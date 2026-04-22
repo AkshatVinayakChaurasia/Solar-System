@@ -1,8 +1,8 @@
-🌌 Solar System Live Wallpaper
+Solar System Live Wallpaper
 
 A simple solar system live wallpaper made by @akshatchaurasia.
 
-🚀 How to Use
+How to Use
 Install Lively Wallpaper from the Microsoft Store
 Download this repository (ZIP)
 Open Lively Wallpaper
