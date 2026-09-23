@@ -1,0 +1,13 @@
+{
+  "AppVersion": "1.0.0",
+  "Title": "Solar System",
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": "",
+  "Desc": "A calm, lock-screen style 3D solar system with a live clock. Click a planet to explore it, double-click to see only that planet.",
+  "Author": "Akshat Chaurasia (@akshatchaurasia)",
+  "License": "Personal use only - see LICENSE",
+  "Contact": "https://linktr.ee/akshatchaurasia",
+  "Type": 1,
+  "IsAbsolute": false,
+  "FileName": "index.html"
+}

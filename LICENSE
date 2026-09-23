@@ -1,0 +1,28 @@
+Solar System Wallpaper
+Copyright (c) 2026 Akshat Chaurasia (@akshatchaurasia). All rights reserved.
+
+This is NOT an open-source license.
+
+You MAY:
+  - download this wallpaper and use it for free on your own devices
+  - share a link to this repository
+
+You MAY NOT, without written permission from the author:
+  - modify the code and publish or share the modified version
+  - re-upload or redistribute this wallpaper, in whole or in part, on any
+    website, store, marketplace or workshop (e.g. Steam Workshop)
+  - sell it or use it for any commercial purpose
+  - remove the "by @akshatchaurasia" credit or present it as your own work
+
+Contact / permissions: https://linktr.ee/akshatchaurasia
+
+Third-party parts keep their own licenses:
+  - three.js (assets/three.module.js): MIT License, Copyright (c) 2010-2023
+    three.js authors, https://threejs.org
+  - Planet, Moon, Sun and star textures (assets/*.jpg, assets/*.png):
+    Solar System Scope, https://www.solarsystemscope.com/textures/,
+    licensed under CC BY 4.0
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY ARISING FROM THE USE OF THE SOFTWARE.

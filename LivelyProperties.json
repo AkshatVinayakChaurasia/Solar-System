@@ -1,0 +1,44 @@
+{
+  "fps": {
+    "type": "slider",
+    "value": 30,
+    "min": 15,
+    "max": 60,
+    "step": 5,
+    "text": "Frame rate cap (lower = lighter)"
+  },
+  "quality": {
+    "type": "dropdown",
+    "value": 1,
+    "text": "Render quality",
+    "items": ["Battery saver", "Balanced", "Sharp (high-DPI)"]
+  },
+  "clock24": {
+    "type": "checkbox",
+    "value": false,
+    "text": "24-hour clock"
+  },
+  "showClock": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Show clock"
+  },
+  "showOrbits": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Show orbit lines"
+  },
+  "speed": {
+    "type": "slider",
+    "value": 1,
+    "min": 0.2,
+    "max": 3,
+    "step": 0.1,
+    "text": "Orbit speed"
+  },
+  "cameraDrift": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Gentle camera drift"
+  }
+}

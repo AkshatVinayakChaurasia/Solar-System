@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <div id="vignette" aria-hidden="true"></div>
+
+    <header id="clock">
+        <div id="date"></div>
+        <div id="time"></div>
+    </header>
+
+    <div id="hover-label" aria-hidden="true"></div>
+    <!-- Shown once, the first time the wallpaper is applied -->
+    <section id="welcome" class="hidden" role="dialog" aria-labelledby="welcome-title">
+        <p class="w-kicker">Welcome</p>
+        <h2 id="welcome-title">Your solar system</h2>
+        <ul class="w-list">
+            <li><span class="w-key">Click</span><span>a planet to view it</span></li>
+            <li><span class="w-key">Click</span><span>it again to go back to the orbit</span></li>
+            <li><span class="w-key">Double-click</span><span>a planet to see only that planet</span></li>
+            <li><span class="w-key">Double-click + drag</span><span>hold the second click and move to rotate the orbit</span></li>
+            <li><span class="w-key">Scroll</span><span>to zoom in and out</span></li>
+        </ul>
+        <button id="welcome-ok">Got it</button>
+        <a class="w-made" href="https://linktr.ee/akshatchaurasia" target="_blank" rel="noopener">Made by @akshatchaurasia</a>
+    </section>
+
+    <!-- Credit -->
+    <div id="credit">
+        <a id="credit-link" href="https://linktr.ee/akshatchaurasia" target="_blank" rel="noopener" title="Open Linktree">
+            <span class="credit-by">by</span> @akshatchaurasia
+            <svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><path d="M8 16L16 8M9 8h7v7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button id="credit-close" class="icon-btn" aria-label="Hide credit" title="Hide">
+            <svg viewBox="0 0 24 24" width="11" height="11"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+        </button>
+    </div>
+
+    <section id="card" class="hidden" aria-live="polite">
+        <div class="card-actions">
+            <button id="card-min" class="icon-btn" aria-label="Hide details and keep this view" title="Keep this view">
+                <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 12h12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </button>
+            <button id="card-close" class="icon-btn" aria-label="Back to overview" title="Back to overview">
+                <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </button>
+        </div>
+        <div id="card-body">
+            <p id="card-kicker"></p>
+            <h1 id="card-name"></h1>
+            <p id="card-desc"></p>
+            <dl id="card-stats"></dl>
+        </div>
+    </section>
+
+    <div id="pin-pill" class="hidden">
+        <span id="pin-name"></span>
+        <button id="pin-expand" class="icon-btn" aria-label="Show details" title="Show details">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="pin-close" class="icon-btn" aria-label="Back to overview" title="Back to overview">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+    </div>
+
+    <nav id="nav" class="hidden">
+        <button id="prev" class="icon-btn" aria-label="Previous">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="dots"></div>
+        <button id="next" class="icon-btn" aria-label="Next">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+    </nav>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

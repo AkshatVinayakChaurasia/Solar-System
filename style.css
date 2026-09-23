@@ -1,0 +1,593 @@
+:root {
+    --text: rgba(255, 255, 255, 0.96);
+    --text-dim: rgba(225, 232, 255, 0.58);
+    --text-soft: rgba(235, 240, 255, 0.78);
+    --glass: rgba(24, 27, 38, 0.46);
+    --glass-strong: rgba(30, 33, 46, 0.62);
+    --hairline: rgba(255, 255, 255, 0.10);
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background: #03040b;
+    color: var(--text);
+    font-family: var(--font-text);
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+/* ---------- Scene ---------- */
+
+#bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    opacity: 0;
+    transition: opacity 1.8s ease;
+}
+
+body.ready #bg-canvas {
+    opacity: 1;
+}
+
+/* Soft vignette + a gentle darkening behind the clock, like the iOS lock screen */
+#vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0) 32%),
+        radial-gradient(130% 95% at 50% 50%, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ---------- Clock ---------- */
+
+#clock {
+    position: fixed;
+    top: 6.5vh;
+    left: 0;
+    right: 0;
+    text-align: center;
+    pointer-events: none;
+    transform-origin: 50% 0;
+    transition: transform 1s var(--ease), opacity 1s var(--ease);
+}
+
+#clock.off {
+    opacity: 0 !important;
+}
+
+#date {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.45vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.84);
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+
+#time {
+    font-family: var(--font-display);
+    font-size: clamp(5.5rem, 11vw, 11.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-top: 0.02em;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 15%, rgba(214, 224, 255, 0.78) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.35));
+}
+
+body.focused #clock {
+    transform: translateY(-2.5vh) scale(0.46);
+    opacity: 0.9;
+}
+
+body.free.dragging #clock {
+    opacity: 0.35;
+}
+
+body.over-planet {
+    cursor: pointer;
+}
+
+body.solo {
+    cursor: grab;
+}
+
+body.dragging {
+    cursor: grabbing;
+}
+
+/* The hover label goes away once the cursor is still for 2 s */
+body.idle #hover-label {
+    opacity: 0;
+}
+
+/* ---------- Hover label ---------- */
+
+#hover-label {
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(18, 20, 30, 0.5);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid var(--hairline);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    will-change: transform;
+}
+
+#hover-label.show {
+    opacity: 1;
+}
+
+/* ---------- First-run welcome ---------- */
+
+#welcome {
+    position: fixed;
+    left: 50%;
+    bottom: 6vh;
+    width: min(460px, calc(100vw - 32px));
+    padding: 22px 24px 18px;
+    border-radius: 26px;
+    background: var(--glass);
+    backdrop-filter: blur(30px) saturate(170%);
+    -webkit-backdrop-filter: blur(30px) saturate(170%);
+    border: 1px solid var(--hairline);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transform: translate(-50%, 0);
+    transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
+}
+
+#welcome.hidden {
+    opacity: 0;
+    transform: translate(-50%, 24px) scale(0.97);
+    pointer-events: none;
+}
+
+.w-kicker {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+#welcome h2 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-top: 2px;
+}
+
+.w-list {
+    list-style: none;
+    margin-top: 14px;
+    display: grid;
+    gap: 9px;
+}
+
+.w-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-soft);
+}
+
+.w-key {
+    flex: none;
+    min-width: 136px;
+    padding: 2px 9px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid var(--hairline);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+}
+
+#welcome-ok {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    padding: 9px 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #0b0d16;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+#welcome-ok:hover {
+    background: #fff;
+}
+
+#welcome-ok:active {
+    transform: scale(0.98);
+}
+
+.w-made {
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.w-made:hover {
+    color: var(--text);
+}
+
+/* ---------- Credit ---------- */
+
+#credit {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 4px 4px 13px;
+    border-radius: 999px;
+    background: rgba(24, 27, 38, 0.36);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--hairline);
+    opacity: 0.75;
+    transition: opacity 0.4s ease, transform 0.6s var(--ease);
+}
+
+#credit:hover {
+    opacity: 1;
+}
+
+#credit.hidden,
+body.focused #credit {
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+}
+
+#credit-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+}
+
+#credit-link svg {
+    opacity: 0.6;
+}
+
+.credit-by {
+    font-weight: 500;
+    color: var(--text-dim);
+}
+
+#credit .icon-btn {
+    width: 22px;
+    height: 22px;
+    background: transparent;
+}
+
+#credit .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Info card ---------- */
+
+#card {
+    position: fixed;
+    left: 50%;
+    bottom: calc(3vh + 52px);
+    width: min(540px, calc(100vw - 32px));
+    padding: 22px 26px 20px;
+    border-radius: 28px;
+    background: var(--glass);
+    backdrop-filter: blur(30px) saturate(170%);
+    -webkit-backdrop-filter: blur(30px) saturate(170%);
+    border: 1px solid var(--hairline);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transform: translate(-50%, 0);
+    transition: opacity 0.6s var(--ease), transform 0.8s var(--ease);
+}
+
+#card.hidden {
+    opacity: 0;
+    transform: translate(-50%, 28px) scale(0.97);
+    pointer-events: none;
+}
+
+#card-body.swap {
+    animation: swap 0.6s var(--ease);
+}
+
+@keyframes swap {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+#card-kicker {
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+#card-name {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-top: 2px;
+}
+
+#card-desc {
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--text-soft);
+    margin-top: 4px;
+    max-width: 44ch;
+}
+
+#card-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--hairline);
+}
+
+.stat + .stat {
+    border-left: 1px solid var(--hairline);
+    padding-left: 14px;
+}
+
+.stat dt {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+.stat dd {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 3px;
+    white-space: nowrap;
+}
+
+.icon-btn {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+.icon-btn:active {
+    transform: scale(0.92);
+}
+
+.card-actions {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+/* ---------- Pinned (details hidden) ---------- */
+
+body.focused.pinned #clock,
+body.focused.solo #clock {
+    transform: none;
+    opacity: 1;
+}
+
+#pin-pill {
+    position: fixed;
+    left: 50%;
+    bottom: 3.2vh;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 5px 5px 16px;
+    border-radius: 999px;
+    background: var(--glass);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid var(--hairline);
+    transform: translate(-50%, 0);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+#pin-pill.hidden {
+    opacity: 0;
+    transform: translate(-50%, 16px);
+    pointer-events: none;
+}
+
+/* Keep the wallpaper clean: the pill fades back once the cursor goes quiet */
+body.idle #pin-pill:not(.hidden) {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#pin-pill:hover {
+    opacity: 1 !important;
+}
+
+#pin-name {
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin-right: 6px;
+}
+
+#pin-pill .icon-btn {
+    width: 26px;
+    height: 26px;
+}
+
+/* ---------- Planet navigation ---------- */
+
+#nav {
+    position: fixed;
+    left: 50%;
+    bottom: 3vh;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    border-radius: 999px;
+    background: var(--glass);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid var(--hairline);
+    transform: translate(-50%, 0);
+    transition: opacity 0.6s var(--ease), transform 0.8s var(--ease);
+}
+
+#nav.hidden {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+    pointer-events: none;
+}
+
+#nav .icon-btn {
+    width: 28px;
+    height: 28px;
+}
+
+#dots {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.3);
+    transition: width 0.45s var(--ease), background 0.3s ease;
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.dot.active {
+    width: 22px;
+    background: #fff;
+}
+
+@media (max-height: 820px) {
+    #card {
+        padding: 16px 20px 14px;
+        border-radius: 24px;
+        width: min(480px, calc(100vw - 32px));
+    }
+
+    #card-name {
+        font-size: 26px;
+    }
+
+    #card-desc {
+        font-size: 13.5px;
+    }
+
+    #card-stats {
+        margin-top: 10px;
+        padding-top: 10px;
+    }
+
+    .stat dd {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 560px) {
+    #card-stats {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 12px;
+    }
+
+    .stat:nth-child(3) {
+        border-left: 0;
+        padding-left: 0;
+    }
+}
+
+/* ---------- Still export (?still): scene only ---------- */
+
+body.still #clock,
+body.still #credit,
+body.still #welcome,
+body.still #card,
+body.still #nav,
+body.still #pin-pill,
+body.still #hover-label {
+    display: none;
+}
+
+body.still #vignette {
+    background: radial-gradient(130% 95% at 50% 50%, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.5) 100%);
+}

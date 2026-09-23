@@ -1,0 +1,7 @@
+# Built Lively package (upload it to a GitHub Release instead of committing it)
+dist/
+
+# OS clutter
+Thumbs.db
+desktop.ini
+.DS_Store
