@@ -1,5 +1,5 @@
 # Solar System — Live Wallpaper 
-(If you like this project, consider giving it a Star)
+If you like this project, consider giving it a Star
 
 A calm, Apple-style 3D solar system for your desktop, with a live lock-screen clock.
 Click any planet to explore it, or keep just one planet as your wallpaper.
